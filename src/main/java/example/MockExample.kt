@@ -5,6 +5,7 @@ import example.removeit.DtoRestResourceInterface
 import example.removeit.HelloRestResourceInterface
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
+import java.util.*
 
 /**
  * This is example of usage of kotlin dsl
@@ -60,6 +61,8 @@ class MockExample : StubsDefinition {
 
             whenRequest {
                 getDto()
+            } with {
+                header("Auth", eq("123"))
             } thenResponse {
                 //You can specify response with its JSON representation.
                 //However it will be first deserialized to your Dto class
@@ -72,6 +75,15 @@ class MockExample : StubsDefinition {
                        "otherField" : 33
                     }
                 """)
+            }
+
+            whenRequest {
+                getDto()
+            } thenResponse {
+                //You can specify response with lambda expression that provides response
+                //In this case each call to this mock returns different values
+                val random = Random()
+                bodyProvider { Dto("Random", random.nextInt()) }
             }
         }
     }
