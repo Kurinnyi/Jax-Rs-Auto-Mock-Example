@@ -1,5 +1,5 @@
   stubs:
-  - className : example.contract.YamlRestResourceInterface
+  - className : example.removeit.YamlRestResourceInterface
     methodName : getDto
     cases :
       - request :
