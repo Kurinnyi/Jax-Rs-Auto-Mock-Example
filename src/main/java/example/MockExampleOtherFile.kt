@@ -1,14 +1,20 @@
 package example
 
-import example.contract.DtoRestResourceInterface
+import example.removeit.DtoRestResourceInterface
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
 
+/**
+ * This is example of usage of kotlin dsl
+ * This class is auto discovered by its interface
+ * Order of mock definitions in different files are not guarantied
+ */
 class MockExampleOtherFile : StubsDefinition {
     override fun getStubs(context: StubDefinitionContext) = context.createStubs {
 
         forClass(DtoRestResourceInterface::class) {
             whenRequest {
+                //There is a matcher the allows you to match against JSON body of the request
                 addDto(bodyJson("""
                     {
                        "field" : "json field",
@@ -32,6 +38,11 @@ class MockExampleOtherFile : StubsDefinition {
                     }
                 """))
             } thenResponse {
+                //You can specify response with its JSON representation.
+                //However it will be first deserialized to your Dto class
+                // and then serialised back to JSON by Jersey mechanisms.
+                //This is done to enforce contract of your resource interface.
+                // In case of usage 'bodyJsonJersey' deserialization is also done by Jersey mechanisms
                 bodyJsonJersey("""
                     {
                        "field" : "json field",
@@ -41,6 +52,7 @@ class MockExampleOtherFile : StubsDefinition {
             }
 
             whenRequest {
+                //You can specify lambda expression to match
                 addDto(match { it.otherField > 10 })
             } thenResponse {
                 bodyJsonJersey("""

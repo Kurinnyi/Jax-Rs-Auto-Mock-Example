@@ -1,4 +1,4 @@
-package example.contract;
+package example.removeit;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

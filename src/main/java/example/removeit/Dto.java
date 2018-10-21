@@ -1,4 +1,4 @@
-package example.contract;
+package example.removeit;
 
 
 public class Dto {
