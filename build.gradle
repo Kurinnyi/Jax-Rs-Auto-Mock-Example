@@ -19,7 +19,7 @@ plugins {
 }
 
 version = '0.1'
-group = "ua.kurinnyi.jaxrs.auto.mock.example"
+group = "example"
 sourceCompatibility = 1.8
 
 repositories {
@@ -65,9 +65,6 @@ jar {
         attributes 'Main-Class': 'example.Main',
                 'Implementation-Title': 'JAX RS Automatic Mocking Example',
                 'Implementation-Version': version
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
