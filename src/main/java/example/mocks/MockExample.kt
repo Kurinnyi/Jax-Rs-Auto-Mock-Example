@@ -1,4 +1,4 @@
-package example
+package example.mocks
 
 import example.removeit.Dto
 import example.removeit.DtoRestResourceInterface

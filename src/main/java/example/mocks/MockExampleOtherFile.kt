@@ -1,4 +1,4 @@
-package example
+package example.mocks
 
 import example.removeit.DtoRestResourceInterface
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
