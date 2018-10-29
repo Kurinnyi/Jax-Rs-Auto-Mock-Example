@@ -1,8 +1,7 @@
 package example.mocks
 
 import example.removeit.DtoRestResourceInterface
-import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
-import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
+import ua.kurinnyi.jaxrs.auto.mock.kotlin.*
 
 /**
  * This is example of usage of kotlin dsl
@@ -22,7 +21,7 @@ class MockExampleOtherFile : StubsDefinition {
                     }
                 """))
             } thenResponse {
-                bodyJson("""
+                bodyJson(BY_JACKSON, """
                     {
                        "field" : "json field",
                        "otherField" : 34
@@ -42,8 +41,8 @@ class MockExampleOtherFile : StubsDefinition {
                 //However it will be first deserialized to your Dto class
                 // and then serialised back to JSON by Jersey mechanisms.
                 //This is done to enforce contract of your resource interface.
-                // In case of usage 'bodyJsonJersey' deserialization is also done by Jersey mechanisms
-                bodyJsonJersey("""
+                //Deserialization mechanism is specified by first argument
+                bodyJson(BY_JERSEY, """
                     {
                        "field" : "json field",
                        "otherField" : 36
@@ -55,17 +54,14 @@ class MockExampleOtherFile : StubsDefinition {
                 //You can specify lambda expression to match
                 addDto(match { it.otherField > 10 })
             } thenResponse {
-                bodyJsonJersey("""
-                    {
-                       "field" : " > 10"
-                    }
-                """)
+                //You can put response json into separate file. For example when it is too big
+                bodyJson(FROM_FILE(BY_JERSEY), "/json/response.json")
             }
 
             whenRequest {
                 addDto(match { it.otherField < 10 })
             } thenResponse {
-                bodyJsonJersey("""
+                bodyJson(BY_JERSEY, """
                     {
                        "field" : " < 10"
                     }
@@ -75,7 +71,7 @@ class MockExampleOtherFile : StubsDefinition {
             whenRequest {
                 addDto(any())
             } thenResponse {
-                bodyJsonJersey("""
+                bodyJson(BY_JACKSON, """
                     {
                        "field" : "any other"
                     }

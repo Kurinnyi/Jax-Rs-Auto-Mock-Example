@@ -3,6 +3,7 @@ package example.mocks
 import example.removeit.Dto
 import example.removeit.DtoRestResourceInterface
 import example.removeit.HelloRestResourceInterface
+import ua.kurinnyi.jaxrs.auto.mock.kotlin.BY_JACKSON
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
 import java.util.*
@@ -62,14 +63,14 @@ class MockExample : StubsDefinition {
             whenRequest {
                 getDto()
             } with {
-                header("Auth", eq("123"))
+                header("Auth", eq("1234"))
             } thenResponse {
                 //You can specify response with its JSON representation.
                 //However it will be first deserialized to your Dto class
                 // and then serialised back to JSON by Jersey mechanisms.
                 //This is done to enforce contract of your resource interface.
-                //Method 'bodyJson' always uses Jackson for deserialization
-                bodyJson("""
+                //Deserialization mechanism is specified by first argument
+                bodyJson(BY_JACKSON, """
                     {
                        "field" : "json field",
                        "otherField" : 33
