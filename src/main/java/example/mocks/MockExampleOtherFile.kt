@@ -1,5 +1,6 @@
 package example.mocks
 
+import example.removeit.Dto
 import example.removeit.DtoRestResourceInterface
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.*
 
@@ -69,13 +70,12 @@ class MockExampleOtherFile : StubsDefinition {
             }
 
             whenRequest {
-                addDto(any())
+                addDto(notNull())
             } thenResponse {
-                bodyJson(BY_JACKSON, """
-                    {
-                       "field" : "any other"
-                    }
-                """)
+                bodyProvider { args ->
+                    val inputDto = args[0] as Dto
+                    Dto("Echo " + inputDto.field, inputDto.otherField)
+                }
             }
 
         }

@@ -84,7 +84,7 @@ class MockExample : StubsDefinition {
                 //You can specify response with lambda expression that provides response
                 //In this case each call to this mock returns different values
                 val random = Random()
-                bodyProvider { Dto("Random", random.nextInt()) }
+                bodyProvider { _ -> Dto("Random", random.nextInt()) }
             }
         }
     }

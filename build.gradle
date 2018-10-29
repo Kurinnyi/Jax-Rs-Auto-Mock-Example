@@ -18,7 +18,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.1'
 }
 
-version = '0.1'
+version = '0.1.3'
 group = "example"
 sourceCompatibility = 1.8
 
@@ -52,7 +52,7 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
 
     compile "ua.kurinnyi.kotlin:pattern-matching:0.1"
-    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.2"
+    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.3"
 
 
     //Add dependencies containing your jax-rs api: resource interfaces, dto bellow
