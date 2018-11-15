@@ -33,6 +33,13 @@ class MockProxyExample : StubsDefinition {
             }
 
             whenRequest {
+                getDto(eq("hi"))
+            } thenResponse {
+                header("HeaderIs", "Proxied")
+                body(Dto("ProxiedHi", 1234))
+            }
+
+            whenRequest {
                 getDto(any())
             } thenResponse {
                 header("HeaderIs", "Proxied")
@@ -44,7 +51,8 @@ class MockProxyExample : StubsDefinition {
             } with {
                 header("Auth", isNull())
             } thenResponse {
-                code(401)
+                header("HeaderIs", "Proxied401")
+                code(500)
             }
 
             whenRequest {
@@ -57,7 +65,7 @@ class MockProxyExample : StubsDefinition {
             whenRequest {
                 addDto(match { it.otherField > 10 })
             } thenResponse {
-                header("HeaderIs", "Proxied")
+                header("HeaderIs", "Proxied401")
                 body(Dto("Proxied > 10", 1234))
             }
         }
