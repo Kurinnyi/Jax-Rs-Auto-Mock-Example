@@ -52,7 +52,7 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
 
     compile "ua.kurinnyi.kotlin:pattern-matching:0.1"
-    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.5"
+    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.6"
 
 
     //Add dependencies containing your jax-rs api: resource interfaces, dto bellow
