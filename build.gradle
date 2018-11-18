@@ -50,9 +50,10 @@ dependencies {
 
     compile 'org.reflections:reflections:0.9.11'
     compile 'commons-io:commons-io:2.4'
+    compile "org.apache.httpcomponents:httpclient:4.5.6"
 
     compile "ua.kurinnyi.kotlin:pattern-matching:0.1"
-    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.7"
+    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.8"
 
 
     //Add dependencies containing your jax-rs api: resource interfaces, dto bellow
