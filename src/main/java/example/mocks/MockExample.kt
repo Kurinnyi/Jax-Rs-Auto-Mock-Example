@@ -22,7 +22,7 @@ class MockExample : StubsDefinition {
             //Define mock
             whenRequest {
                 //specify method to mock. And matching requirements for mock to be invoked
-                getHello(any(), any())
+                getHello(any(), anyLong())
             } with {
                 //specify header
                 header("Auth", isNull())
@@ -42,7 +42,7 @@ class MockExample : StubsDefinition {
             }
 
             whenRequest {
-                getHello(any(), any())
+                getHello(any(), anyLong())
             } thenResponse {
                 body("Hello any other")
                 //Response header
