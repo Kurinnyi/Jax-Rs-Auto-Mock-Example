@@ -31,33 +31,39 @@ class MockExample : StubsDefinition {
                 code(401)
             }
 
-            whenRequest {
-                //You can use same method few times in same and different 'whenRequest' sections
-                //Mock with first matching 'whenRequest' section will be used
-                getHello(notNull(), eq(12))
-                getHello(notNull(), eq(14))
-            } thenResponse {
-                //response body
-                body("Hello 12 or 14")
-            }
+            group("upper level group", activeByDefault = false) {
+                group("partially activated group") {
+                    whenRequest {
+                        //You can use same method few times in same and different 'whenRequest' sections
+                        //Mock with first matching 'whenRequest' section will be used
+                        getHello(notNull(), eq(12))
+                        getHello(notNull(), eq(14))
+                    } thenResponse {
+                        //response body
+                        body("Hello 12 or 14")
+                    }
+                }
 
-            whenRequest {
-                getHello(any(), anyLong())
-            } thenResponse {
-                body("Hello any other")
-                //Response header
-                header("Some header", "header value")
+                whenRequest {
+                    getHello(any(), anyLong())
+                } thenResponse {
+                    body("Hello any other")
+                    //Response header
+                    header("Some header", "header value")
+                }
             }
         }
 
         //Different classes can be mocked in one file
         forClass(DtoRestResourceInterface::class){
-            whenRequest {
-                getDto()
-            } with {
-                header("Auth", eq("123"))
-            } thenResponse {
-                body(Dto("some field", 42))
+            group("partially activated group", activeByDefault = false) {
+                whenRequest {
+                    getDto()
+                } with {
+                    header("Auth", eq("123"))
+                } thenResponse {
+                    body(Dto("some field", 42))
+                }
             }
 
             whenRequest {
