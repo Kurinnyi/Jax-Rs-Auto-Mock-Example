@@ -1,96 +1,41 @@
 package example.mocks
 
-import example.removeit.Dto
-import example.removeit.DtoRestResourceInterface
 import example.removeit.HelloRestResourceInterface
-import ua.kurinnyi.jaxrs.auto.mock.kotlin.BY_JACKSON
+import ua.kurinnyi.jaxrs.auto.mock.StubServer
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
-import java.util.*
 
-/**
- * This is example of usage of kotlin dsl
- * This class is auto discovered by its interface
- * Order of mock definitions in different files are not guarantied
- */
+object Main {
+    @JvmStatic
+    fun main(args: Array<String>) = StubServer().setPort(8080).start()
+}
+
 class MockExample : StubsDefinition {
     //copy paste this line
     override fun getStubs(context: StubDefinitionContext) = context.createStubs {
 
         //Define class of jax-rs interface you want to mock
         forClass(HelloRestResourceInterface::class) {
-            //Define mock
+            //do the mocking
             whenRequest {
-                //specify method to mock. And matching requirements for mock to be invoked
+                getHello(eq("Ivan"), anyLong())
+            } thenResponse {
+                body("Hello Ivan")
+                //Response header
+                header("Some header", "header value")
+            }
+
+            whenRequest {
                 getHello(any(), anyLong())
-            } with {
-                //specify header
-                header("Auth", isNull())
             } thenResponse {
-                //response code. Should be never set if it is 200
-                code(401)
+                body("Hello Guest")
+                //Response header
+                header("Some header", "header value")
             }
-
-            group("upper level group", activeByDefault = false) {
-                group("partially activated group") {
-                    whenRequest {
-                        //You can use same method few times in same and different 'whenRequest' sections
-                        //Mock with first matching 'whenRequest' section will be used
-                        getHello(notNull(), eq(12))
-                        getHello(notNull(), eq(14))
-                    } thenResponse {
-                        //response body
-                        body("Hello 12 or 14")
-                    }
-                }
-
-                whenRequest {
-                    getHello(any(), anyLong())
-                } thenResponse {
-                    body("Hello any other")
-                    //Response header
-                    header("Some header", "header value")
-                }
-            }
-        }
-
-        //Different classes can be mocked in one file
-        forClass(DtoRestResourceInterface::class){
-            group("partially activated group", activeByDefault = false) {
-                whenRequest {
-                    getDto()
-                } with {
-                    header("Auth", eq("123"))
-                } thenResponse {
-                    body(Dto("some field", 42))
-                }
-            }
-
             whenRequest {
-                getDto()
-            } with {
-                header("Auth", eq("1234"))
+                echo(anyLong())
             } thenResponse {
-                //You can specify response with its JSON representation.
-                //However it will be first deserialized to your Dto class
-                // and then serialised back to JSON by Jersey mechanisms.
-                //This is done to enforce contract of your resource interface.
-                //Deserialization mechanism is specified by first argument
-                bodyJson(BY_JACKSON, """
-                    {
-                       "field" : "json field",
-                       "otherField" : 33
-                    }
-                """)
-            }
-
-            whenRequest {
-                getDto()
-            } thenResponse {
-                //You can specify response with lambda expression that provides response
-                //In this case each call to this mock returns different values
-                val random = Random()
-                bodyProvider { _ -> Dto("Random", random.nextInt()) }
+                bodyProvider { (id) -> id as Long }
             }
         }
     }
