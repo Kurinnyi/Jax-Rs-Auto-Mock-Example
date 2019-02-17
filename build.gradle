@@ -53,7 +53,7 @@ dependencies {
     compile "org.apache.httpcomponents:httpclient:4.5.6"
 
     compile "ua.kurinnyi.kotlin:pattern-matching:0.1"
-    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.11"
+    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.1.12"
 
 
     //Add dependencies containing your jax-rs api: resource interfaces, dto bellow

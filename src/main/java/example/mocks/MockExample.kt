@@ -26,16 +26,25 @@ class MockExample : StubsDefinition {
             }
 
             whenRequest {
+                echo(anyLong())
+            } thenResponse {
+                bodyProvider { (id) -> id as Long }
+            }
+
+            whenRequest {
+                getHello(eq("Error"), anyLong())
+            } thenResponse {
+                bodyRaw("""{"message":"this is error"}""")
+                code(514)
+                header("Content-Type", "application/json")
+            }
+
+            whenRequest {
                 getHello(any(), anyLong())
             } thenResponse {
                 body("Hello Guest")
                 //Response header
                 header("Some header", "header value")
-            }
-            whenRequest {
-                echo(anyLong())
-            } thenResponse {
-                bodyProvider { (id) -> id as Long }
             }
         }
     }
