@@ -52,6 +52,29 @@ class MockExampleOtherFile : StubsDefinition {
             }
 
             whenRequest {
+                addDto(match { it.field == "template" })
+            } thenResponse {
+                bodyJsonTemplate(BY_JERSEY, """
+                    {
+                       "field" : "template {{ f1 }}"
+                    }
+                """, { (dto) -> mapOf("f1" to (dto as Dto).otherField)})
+            }
+
+            whenRequest {
+                addDto(match { it.field == "postProcess" })
+            } thenResponse {
+                bodyJson(BY_JERSEY, """
+                    {
+                       "field" : "postProcessResp",
+                       "otherField" : 12
+                    }
+                """) { dto, (request) ->
+                    dto?.apply { otherField += (request as Dto).otherField }
+                }
+            }
+
+            whenRequest {
                 //You can specify lambda expression to match
                 addDto(match { it.otherField > 10 })
             } thenResponse {
