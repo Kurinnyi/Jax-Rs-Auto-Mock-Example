@@ -15,14 +15,14 @@ class MockExampleOtherFile : StubsDefinition {
         forClass(DtoRestResourceInterface::class) {
             case {
                 //There is a matcher the allows you to match against JSON body of the request
-                addDto(bodyJson("""
+                addDto(bodySameJson("""
                     {
                        "field" : "json field",
                        "otherField" : 33
                     }
                 """))
             } then {
-                bodyJson(BY_JACKSON, """
+                bodyJson("""
                     {
                        "field" : "json field",
                        "otherField" : 34
@@ -31,7 +31,7 @@ class MockExampleOtherFile : StubsDefinition {
             }
 
             case {
-                addDto(bodyJson("""
+                addDto(bodySameJson("""
                     {
                        "field" : "json field",
                        "otherField" : 35
@@ -54,11 +54,11 @@ class MockExampleOtherFile : StubsDefinition {
             case {
                 addDto(match { it.field == "template" })
             } then1 { dto:Dto ->
-                bodyJsonTemplate(BY_JERSEY,  mapOf("f1" to dto.otherField), """
+                bodyJson(BY_JERSEY, """
                     {
                        "field" : "template {{ f1 }}"
                     }
-                """)
+                """, "f1" to dto.otherField)
             }
 
             case {
@@ -78,7 +78,7 @@ class MockExampleOtherFile : StubsDefinition {
                 addDto(match { it.otherField > 10 })
             } then {
                 //You can put response json into separate file. For example when it is too big
-                bodyJson(FROM_FILE(BY_JERSEY), "/json/response.json")
+                bodyJson("/json/response.json")
             }
 
             case {
