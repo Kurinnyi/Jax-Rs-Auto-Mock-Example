@@ -13,7 +13,7 @@ class MockExampleOtherFile : StubsDefinition {
     override fun getStubs(context: StubDefinitionContext) = context.createStubs {
 
         forClass(DtoRestResourceInterface::class) {
-            whenRequest {
+            case {
                 //There is a matcher the allows you to match against JSON body of the request
                 addDto(bodyJson("""
                     {
@@ -21,7 +21,7 @@ class MockExampleOtherFile : StubsDefinition {
                        "otherField" : 33
                     }
                 """))
-            } thenResponse {
+            } then {
                 bodyJson(BY_JACKSON, """
                     {
                        "field" : "json field",
@@ -30,14 +30,14 @@ class MockExampleOtherFile : StubsDefinition {
                 """)
             }
 
-            whenRequest {
+            case {
                 addDto(bodyJson("""
                     {
                        "field" : "json field",
                        "otherField" : 35
                     }
                 """))
-            } thenResponse {
+            } then {
                 //You can specify response with its JSON representation.
                 //However it will be first deserialized to your Dto class
                 // and then serialised back to JSON by Jersey mechanisms.
@@ -51,40 +51,39 @@ class MockExampleOtherFile : StubsDefinition {
                 """)
             }
 
-            whenRequest {
+            case {
                 addDto(match { it.field == "template" })
-            } thenResponse {
-                bodyJsonTemplate(BY_JERSEY, """
+            } then1 { dto:Dto ->
+                bodyJsonTemplate(BY_JERSEY,  mapOf("f1" to dto.otherField), """
                     {
                        "field" : "template {{ f1 }}"
                     }
-                """, { (dto) -> mapOf("f1" to (dto as Dto).otherField)})
+                """)
             }
 
-            whenRequest {
+            case {
                 addDto(match { it.field == "postProcess" })
-            } thenResponse {
-                bodyJson(BY_JERSEY, """
+            } then1 { requestDto:Dto ->
+                val jsonDto = bodyJson(BY_JERSEY, """
                     {
                        "field" : "postProcessResp",
                        "otherField" : 12
                     }
-                """) { dto, (request) ->
-                    dto?.apply { otherField += (request as Dto).otherField }
-                }
+                """)
+                jsonDto?.apply { otherField += requestDto.otherField }
             }
 
-            whenRequest {
+            case {
                 //You can specify lambda expression to match
                 addDto(match { it.otherField > 10 })
-            } thenResponse {
+            } then {
                 //You can put response json into separate file. For example when it is too big
                 bodyJson(FROM_FILE(BY_JERSEY), "/json/response.json")
             }
 
-            whenRequest {
+            case {
                 addDto(match { it.otherField < 10 })
-            } thenResponse {
+            } then {
                 bodyJson(BY_JERSEY, """
                     {
                        "field" : " < 10"
@@ -92,13 +91,10 @@ class MockExampleOtherFile : StubsDefinition {
                 """)
             }
 
-            whenRequest {
+            case {
                 addDto(notNull())
-            } thenResponse {
-                bodyProvider { args ->
-                    val inputDto = args[0] as Dto
-                    Dto("Echo " + inputDto.field, inputDto.otherField)
-                }
+            } then1 { inputDto:Dto ->
+                Dto("Echo " + inputDto.field, inputDto.otherField)
             }
 
         }

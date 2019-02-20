@@ -1,10 +1,10 @@
 package example.mocks
 
 import example.removeit.Dto
-import example.removeit.DtoRestResourceInterface
 import example.removeit.ProxyOtherRestResourceInterface
 import example.removeit.ProxyRestResourceInterface
-import ua.kurinnyi.jaxrs.auto.mock.kotlin.*
+import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
+import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
 
 /**
  * This is example of usage of kotlin dsl
@@ -15,58 +15,58 @@ class MockProxyExample : StubsDefinition {
     override fun getStubs(context: StubDefinitionContext) = context.createStubs {
 
         forClass(ProxyRestResourceInterface::class) {
-            whenRequest {
+            case {
                 getDto(any())
                 addDto(any())
-            } thenResponse {
+            } then {
                 proxyTo("http://localhost:8080/other")
             }
         }
 
         forClass(ProxyOtherRestResourceInterface::class) {
-            whenRequest {
+            case {
                 getDto(any())
             } with {
                 header("Auth", isNull())
-            } thenResponse {
+            } then {
                 code(401)
             }
 
-            whenRequest {
+            case {
                 getDto(eq("hi"))
-            } thenResponse {
+            } then {
                 header("HeaderIs", "Proxied")
-                body(Dto("ProxiedHi", 1234))
+                Dto("ProxiedHi", 1234)
             }
 
-            whenRequest {
+            case {
                 getDto(any())
-            } thenResponse {
+            } then {
                 header("HeaderIs", "Proxied")
-                body(Dto("Proxied", 1234))
+                Dto("Proxied", 1234)
             }
 
-            whenRequest {
+            case {
                 addDto(any())
             } with {
                 header("Auth", isNull())
-            } thenResponse {
+            } then {
                 header("HeaderIs", "Proxied401")
                 code(500)
             }
 
-            whenRequest {
+            case {
                 addDto(match { it.otherField < 10 })
-            } thenResponse {
+            } then {
                 header("HeaderIs", "Proxied")
-                body(Dto("Proxied < 10", 1234))
+                Dto("Proxied < 10", 1234)
             }
 
-            whenRequest {
+            case {
                 addDto(match { it.otherField > 10 })
-            } thenResponse {
+            } then {
                 header("HeaderIs", "Proxied401")
-                body(Dto("Proxied > 10", 1234))
+                Dto("Proxied > 10", 1234)
             }
         }
     }

@@ -17,34 +17,34 @@ class MockExample : StubsDefinition {
         //Define class of jax-rs interface you want to mock
         forClass(HelloRestResourceInterface::class) {
             //do the mocking
-            whenRequest {
+            case {
                 getHello(eq("Ivan"), anyLong())
-            } thenResponse {
-                body("Hello Ivan")
+            } then {
                 //Response header
                 header("Some header", "header value")
+                "Hello Ivan"
             }
 
-            whenRequest {
+            case {
                 echo(anyLong())
-            } thenResponse {
-                bodyProvider { (id) -> id as Long }
+            } then1 { id:Long ->
+                id
             }
 
-            whenRequest {
+            case {
                 getHello(eq("Error"), anyLong())
-            } thenResponse {
+            } then {
                 bodyRaw("""{"message":"this is error"}""")
                 code(514)
                 header("Content-Type", "application/json")
             }
 
-            whenRequest {
+            case {
                 getHello(any(), anyLong())
-            } thenResponse {
-                body("Hello Guest")
+            } then {
                 //Response header
                 header("Some header", "header value")
+                "Hello Guest"
             }
         }
     }
