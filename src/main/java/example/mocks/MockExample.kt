@@ -1,7 +1,9 @@
 package example.mocks
 
+import example.removeit.Dto
 import example.removeit.HelloRestResourceInterface
 import ua.kurinnyi.jaxrs.auto.mock.StubServer
+import ua.kurinnyi.jaxrs.auto.mock.kotlin.JsonUtils
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubDefinitionContext
 import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
 
@@ -37,6 +39,28 @@ class MockExample : StubsDefinition {
                 bodyRaw("""{"message":"this is error"}""")
                 code(514)
                 header("Content-Type", "application/json")
+            }
+
+            case {
+                getHello(eq("JsonPlay"), anyLong())
+            } then {
+                val dto:Dto = JsonUtils.loadJson("""
+                    {
+                       "field" : "template {{ f1 }}"
+                    }
+                """, "f1" to "this is not supposed to be the answer")
+                bodyRaw(JsonUtils.toJson(dto))
+            }
+
+            case {
+                getHello(eq("JsonPlayList"), anyLong())
+            } then {
+                val dto:List<Dto> = JsonUtils.loadJsonList("""
+                    [{
+                       "field" : "template {{ f1 }}"
+                    }]
+                """, "f1" to "this is not supposed to be the answer")
+                bodyRaw(JsonUtils.toJson(dto))
             }
 
             case {
