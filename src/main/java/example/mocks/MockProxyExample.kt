@@ -12,13 +12,16 @@ import ua.kurinnyi.jaxrs.auto.mock.kotlin.StubsDefinition
  * Order of mock definitions in different files are not guarantied
  */
 class MockProxyExample : StubsDefinition {
+
+    override fun getPriority(): Int  = 1
     override fun getStubs(context: StubDefinitionContext) = context.createStubs {
 
         forClass(ProxyRestResourceInterface::class) {
             case {
-                getDto(any())
+                getDto(anyInRecord())
                 addDto(any())
             } then {
+                record()
                 proxyTo("http://localhost:8080/other")
             }
         }
