@@ -54,7 +54,7 @@ dependencies {
 
     compile "ua.kurinnyi.kotlin:pattern-matching:0.1"
     compile "io.pebbletemplates:pebble:3.0.8"
-    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.3.0"
+    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.4.0"
 
     //Add dependencies containing your jax-rs api: resource interfaces, dto bellow
 
