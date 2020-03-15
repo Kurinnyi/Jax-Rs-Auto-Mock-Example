@@ -1,4 +1,4 @@
-package example.removeit;
+package example.removeit.apiv2;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +15,10 @@ public interface HelloRestResourceInterface {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("echo/{id}")
     public long echo(@PathParam("id") long id);
+
+    @PUT
+    @Path("noResponse/{id}")
+    void noResponse(@PathParam("id") long id);
 
 }
 

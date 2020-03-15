@@ -1,10 +1,12 @@
-package example.removeit;
+package example.removeit.apiv1;
+
+import example.removeit.Dto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/proxy")
-public interface ProxyRestResourceInterface {
+public interface Apiv1ProxyRestResourceInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

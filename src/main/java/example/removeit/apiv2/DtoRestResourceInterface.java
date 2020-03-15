@@ -1,6 +1,11 @@
-package example.removeit;
+package example.removeit.apiv2;
 
-import javax.ws.rs.*;
+import example.removeit.Dto;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/helloworld")
