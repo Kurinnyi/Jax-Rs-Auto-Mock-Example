@@ -1,26 +1,27 @@
 buildscript {
-    ext.kotlin_version = '1.2.71'
+    ext.kotlin_version = '1.9.22'
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.1'
+        classpath 'com.github.johnrengelman:shadow:8.1.1'
     }
+
 }
+
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version "1.2.71"
-    id 'com.github.johnrengelman.shadow' version '4.0.1'
+    id "org.jetbrains.kotlin.jvm" version "1.9.22"
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
-version = '0.1.4'
+version = '0.1.5'
 group = "example"
-sourceCompatibility = 1.8
+sourceCompatibility = 17
 
 repositories {
     mavenCentral()
@@ -30,34 +31,44 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.tomcat.embed:tomcat-embed-core:8.0.15'
-    compile 'org.apache.tomcat.embed:tomcat-embed-logging-juli:8.0.15'
-    compile 'org.apache.tomcat.embed:tomcat-embed-jasper:8.0.15'
+    implementation "org.slf4j:slf4j-simple:2.0.13"
+    implementation "org.slf4j:slf4j-api:2.0.13"
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.0-M16'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.0-M16'
 
-    compile 'org.glassfish.jersey.core:jersey-common:2.13'
-    compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.13'
-    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.13'
+    implementation 'org.glassfish.jersey.core:jersey-common:3.1.5'
+    implementation 'org.glassfish.jersey.containers:jersey-container-servlet:3.1.5'
+    implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:3.1.5'
+    implementation 'org.glassfish.jersey.inject:jersey-hk2:3.1.5'
 
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.6'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.6'
-    compile 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1'
+    implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.16.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
-    compile "org.jetbrains.kotlin:kotlin-stdlib"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
 
-    compile 'org.reflections:reflections:0.9.11'
-    compile 'commons-io:commons-io:2.4'
-    compile "org.apache.httpcomponents:httpclient:4.5.6"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
 
-    compile "ua.kurinnyi.kotlin:pattern-matching:0.1"
-    compile "io.pebbletemplates:pebble:3.0.8"
-    compile "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.5.1"
+    implementation 'io.github.classgraph:classgraph:4.8.172'
+    implementation 'commons-io:commons-io:2.15.1'
+    implementation "org.apache.httpcomponents:httpclient:4.5.14"
+
+    implementation "ua.kurinnyi.kotlin:pattern-matching:0.1"
+    implementation "io.pebbletemplates:pebble:3.2.2"
+    implementation "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.5.2"
 
     //Add dependencies containing your jax-rs api: resource interfaces, dto bellow
 
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 sourceSets {

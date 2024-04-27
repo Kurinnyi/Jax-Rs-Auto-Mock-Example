@@ -2,8 +2,8 @@ package example.removeit.apiv1;
 
 import example.removeit.Dto;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/proxy")
 public interface Apiv1ProxyRestResourceInterface {

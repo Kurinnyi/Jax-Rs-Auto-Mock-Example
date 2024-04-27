@@ -1,10 +1,10 @@
 package example.mocks.apiv2
 
-import example.removeit.apiv1.Apiv1GropExampleResourceInterface
+import example.removeit.apiv2.GropExampleResourceInterface
 import ua.kurinnyi.jaxrs.auto.mock.apiv2.Mock
 import java.util.concurrent.atomic.AtomicLong
 
-class GroupsExample : Mock<Apiv1GropExampleResourceInterface>({ mock ->
+class GroupsExample : Mock<GropExampleResourceInterface>({ mock ->
 
     val counter = AtomicLong(0)
 
