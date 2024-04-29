@@ -25,8 +25,12 @@ sourceCompatibility = 17
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs'
+    maven {
+        url = uri("https://maven.pkg.github.com/kurinnyi/ua")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
     }
 }
 
@@ -57,7 +61,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.15.1'
     implementation "org.apache.httpcomponents:httpclient:4.5.14"
 
-    implementation "ua.kurinnyi.kotlin:pattern-matching:0.1"
+    implementation "ua.kurinnyi.kotlin:pattern-matching:0.1.2"
     implementation "io.pebbletemplates:pebble:3.2.2"
     implementation "ua.kurinnyi.jaxrs.auto.mock:jax-rs-auto-mock:0.5.2"
 
